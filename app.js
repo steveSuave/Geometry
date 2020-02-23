@@ -424,6 +424,7 @@ function selectObject(pointer, objects, allowedTypes) {
 function PlaenController(canvasElement) {
 	this.canvasElement = canvasElement;
 	this.objects = [];
+	this.textObjects = [];
 	this.selectType = 0;
 
 	this.canvasElement.addEventListener("mousedown", this, false);
@@ -536,6 +537,8 @@ PlaenController.prototype.redraw = function () {
 		this.objects[i].draw(this.ctx);
 	if (highlighted != undefined && highlighted.type == 1)
 		highlighted.draw(this.ctx, 'high');
+	if (this.textObjects.length > 0)
+		this.textObjects.forEach(el => el.draw(this.ctx));
 }
 
 PlaenController.prototype.asyncSelectObject = function (type) {
@@ -548,7 +551,10 @@ PlaenController.prototype.asyncSelectObject = function (type) {
 }
 
 PlaenController.prototype.addObject = function (obj) {
-	this.objects.push(obj);
+	if (obj.txt)
+		this.textObjects.push(obj);
+	else
+		this.objects.push(obj);
 }
 
 function load() {
@@ -600,6 +606,18 @@ var book2 = [
 		"title": "2.2 placeholder"
 	}
 ];
+
+function Text(txt){
+	this.text=txt;	
+	this.txt=true;
+}
+
+Text.prototype.draw = function td(ctx, color){
+	ctx.font = 'bold 13px Arial';
+	ctx.fillStyle = color || '#640303';
+	x = 10; y = 18;
+	ctx.fillText(this.text, x, y);
+}
 
 function square(x) {
 	return x * x;
@@ -653,6 +671,9 @@ function selectProp(obj) {
 	s.src = "euclid-proofs-and-constructions/" + obj.value;
 	document.getElementById("propSteps").innerHTML = "";
 	document.getElementById("propSteps").appendChild(s);
+	// maybe abstract the whole empty->redraw
+	plaenController.textObjects = [];
+	plaenController.addObject(new Text(obj.value));
 }
 
 // true is next false is prev
@@ -662,7 +683,7 @@ function nextOrPrev(bool) {
 	try { bool ? stepForward() : stepBackward(); }
 	catch (TypeError) {
 		// cannot iterate over template placeholders 
-		// clear content previous anyway
+		// clear previous content anyway
 		plaenController.objects = [];
 		toMove = [];
 	}
