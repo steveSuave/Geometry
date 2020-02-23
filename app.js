@@ -583,25 +583,25 @@ var book1 = [
 		"prop": 1,
 		"uri": "book1/1.1_equilateral-triangle.js",
 		"text": "Prop 1",
-		"title": "1.1 equilateral triangle"
+		"title": "1.1 Equilateral Triangle"
 	},
 	{
 		"prop": 2,
 		"uri": "book1/1.2_equal-line-from-point.js",
 		"text": "Prop 2",
-		"title": "1.2 equal line from point"
+		"title": "1.2 Equal Line From Point"
 	}
 ];
 var book2 = [
 	{
 		"prop": 1,
-		"uri": "book2/placeholder.js",
+		"uri": "preset",
 		"text": "tmp 1",
 		"title": "2.1 placeholder"
 	},
 	{
 		"prop": 2,
-		"uri": "book2/placeholder.js",
+		"uri": "preset",
 		"text": "tmp 2",
 		"title": "2.2 placeholder"
 	}
@@ -652,10 +652,15 @@ function loadProps(obj) {
 	// keep the "choose a prop" option
 	while (propsTag.options.length > 1) { propsTag.remove(1); }  
 	let book = obj.value;
+	if (!window[book]) {
+		plaenController.textObjects = [];
+		return;
+	}
 	for (let prop of window[book]) {
 		var opt = document.createElement("option");
-		opt.text = prop["text"];
+		opt.text  = prop["text"];
 		opt.value = prop["uri"];
+		opt.title = prop["title"];
 		propsTag.appendChild(opt);
 	}
 }
@@ -668,12 +673,14 @@ function selectProp(obj) {
 	// load prop's steps
 	var s = document.createElement("script");
 	s.type = "text/javascript";
-	s.src = "euclid-proofs-and-constructions/" + obj.value;
-	document.getElementById("propSteps").innerHTML = "";
-	document.getElementById("propSteps").appendChild(s);
+	s.src  = "euclid-proofs-and-constructions/" + obj.value;
+	document.getElementById("propScript").innerHTML = "";
+	document.getElementById("propScript").appendChild(s);
 	// maybe abstract the whole empty->redraw
 	plaenController.textObjects = [];
-	plaenController.addObject(new Text(obj.value));
+	plaenController.addObject(
+		new Text(obj.options[obj.selectedIndex].title)
+	);
 }
 
 // true is next false is prev
