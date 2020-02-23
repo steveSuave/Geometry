@@ -161,11 +161,11 @@ Line.prototype.draw = function (ctx, high) {
 		if (this.x != undefined) {
 			this.a.y < this.b.y ?
 				ctx.lineTo(this.a.x, 2000) :
-				ctx.lineTo(this.a.x, -2000); // gia drag and drop
+				ctx.lineTo(this.a.x, -2000); // for drag and drop
 		} else {
 			this.a.x < this.b.x ?
 				ctx.lineTo(2000, 2000 * this.slope + this.y_intercept) :
-				// ftiaksto gia drag and drop
+				// fix for drag and drop
 				ctx.lineTo(0, this.y_intercept);
 		}
 	} else if (this.x != undefined) {
