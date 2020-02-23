@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="dist/style.css">
-        <script src="dist/entry.bundle.js"></script>
-		<title>Geometry constructions</title>
-		<link rel="shortcut icon" href="dist/resources/icon.png"/>
-	</head>
-	<body>
-		<canvas id="canvas"></canvas>
-		<div id="left-panel">
-			<div class="toolbar" id="toolbar-main">
-				<img src="dist/resources/points.png" class="button" data-showtoolbar="toolbar-point" />
-				<img src="dist/resources/line.png" class="button" data-showtoolbar="toolbar-line" />
-				<img src="dist/resources/circleCenterPoint.png" class="button" data-showtoolbar="toolbar-circle" />
-				<img src="dist/resources/erase.png" class="button" data-actionremove />
-			</div>
 
-			<div class="toolbar-aux" id="toolbar-point" style="display: none;">
-				<img src="dist/resources/points.png" id="button-point" class="button" data-action="point" />
-				<img src="dist/resources/middle.png" id="button-middle-point" class="button" data-action="middlePoint" />
-				<img src="dist/resources/intersection.png" id="button-intersection-point" class="button" data-action="intersectObjects" />
-			</div>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="app.js"></script>
+	<title>Plaen</title>
+</head>
 
-			<div class="toolbar-aux" id="toolbar-line" style="display:none;">
-				<img src="dist/resources/line.png" id="button-two-point-line" class="button" data-action="twoPointLine" />
-				<img src="dist/resources/normal.png" class="button" data-action="normalLine" />
-				<img src="dist/resources/paralel.png" class="button" data-action="paralelLine" />
-				<img src="dist/resources/segment-bisector.png" class="button" data-action="segmentBisector" />
-				<img src="dist/resources/angle-bisector.png" class="button" data-action="angleBisector" />
-			</div>
+<body>
+	<div id="panel">
+		<img src="dist/resources/points.png" class="button" data-action="point" />
+		<img src="dist/resources/middle.png" class="button" data-action="middlePoint" />
+		<img src="dist/resources/intersection.png" class="button" data-action="intersectObjects" />
+		<img src="dist/resources/line.png" class="button" data-action="twoPointLine" />
+		<img src="dist/resources/normal.png" class="button" data-action="verticalLine" />
+		<img src="dist/resources/paralel.png" class="button" data-action="paralelLine" />
+		<img src="dist/resources/segment-bisector.png" class="button" data-action="segmentBisector" />
+		<img src="dist/resources/angle-bisector.png" class="button" data-action="angleBisector" />
+		<img src="dist/resources/circleCenterPoint.png" class="button" data-action="circleTwoPoint" />
+		<img src="dist/resources/circle-three-point.png" class="button" data-action="circleThreePoint" />
+		<img src="dist/resources/compass.png" class="button" data-action="circleCompass" />
+		<img src="dist/resources/erase.png" class="button" data-actionremove />
+	</div>
+	<canvas id="canvas"></canvas>
+	<div id="bottom">
+		<span class="lnx" onclick="nextOrPrev(false)">&lt;-- Prev</span>
+		<select id="books" class="index" onchange="loadProps(this)">
+			<option value="preset">Choose Book</option>
+			<option value="book1">Book 1</option>
+			<option value="book2">Book 2</option>
+		</select>
+		<!-- Need to keep it blank if no book chosen -->
+		<select id="props" class="index" onchange="selectProp(this)">
+			<option value="preset">Choose Prop</option>
+		</select>
+		<span class="lnx" onclick="nextOrPrev(true)">Next --&gt;</span>
+	</div>
 
-			<div class="toolbar-aux" id="toolbar-circle" style="display: none;">
-				<img src="dist/resources/circleCenterPoint.png" id="button-circle-center-radius" class="button" data-action="circleTwoPoint" />
-				<img src="dist/resources/circle-three-point.png" class="button" data-action="circleThreePoint" />
-				<img src="dist/resources/compass.png" class="button" data-action="circleCompass" />
-			</div>
-		</div>
+	<script> load(); </script>
+	<div id="propSteps"></div>
+</body>
 
-		<script>
-			Controller.load();
-		</script>
-	</body>
 </html>

@@ -1,45 +1,70 @@
-#left-panel
-{
-	position: absolute;
-	top :	10px;
-	right: 	20px;
+#panel {
+	display: table;
+	margin: 0 auto;
 }
 
-.toolbar, .toolbar-aux
-{
-	margin-top: 20px;
-	background-color: #404040;
-	padding: 10px;
-	border-radius: 10px;
-}
-
-.button
-{
-    display: block;
+.button {
+	margin-top: 10px;
 	border-radius:10px;
 	border-width: 3px;
 	border-color: #404040;
 	border-style: solid;
 }
 
-.button + .button 
-{
-	margin-top: 10px;
-}
-
-.button-selected
-{
+.button-selected {
 	border-color: #0099FF;
 }
 
-html, body, canvas
-{
+#bottom {
+	position: fixed;
+	bottom: 3.3%;
+	left: 0;
+	right:0;
+	text-align: center;
+	/* transform: translateX(-50%); */
+}
+
+.index {
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+	appearance:none;
+	padding-left: 10px;
+	padding-right: 10px;
+	height:2em;
+	background-color: #D4B996FF;
+	border: 2px rgb(100, 3, 3) solid;
+}
+
+.lnx {
+	padding: 5px;
+	color: rgb(100, 3, 3);
+	cursor: pointer;
+	/* border: 2px #D4B996FF solid; */
+
+}
+
+html, body  {
     padding: 0px;
     min-height: 100%;
     display: block;
-    margin: 0px;
+	margin: 0px;
+	background-color: #A07855FF;
 }
 
+canvas {
+	background-color: #D4B996FF;
+	border: 3px rgb(100, 3, 3) solid;
+	padding: 0;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+	right: 0;
+}
+
+/*
 html
 {
 	background-image:
@@ -60,3 +85,4 @@ html
 	background-size: .75em .75em;
 	background-position: 0 -0.5em; 
 }
+*/

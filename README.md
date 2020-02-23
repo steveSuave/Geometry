@@ -1,8 +1,3 @@
-# Geometry
+# Plaen
 
-A Javascript Web App for compas and straight edge geometry constructions. Apart from drawing lines and circles, more comlex operations, such as drawing paralel and perpendicular lines, bisection of lines and angles, and drawing a circle defined by three points are available. The user interface supports snaping to lines and circles as well as to intersections of already drawn objects.
-
-![Icon](icon.png)
-
-This app is hosted on Github pages as a demo:
-[https://zdule.github.io/Geometry](https://zdule.github.io/Geometry)
+A Javascript Web App for compass and straight edge geometry constructions forked from github.com/zdule/Geometry. Apart from drawing lines and circles, the propositions of Euclids Elements can be loaded using random points and navigated through step by step.
