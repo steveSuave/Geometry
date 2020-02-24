@@ -595,13 +595,13 @@ var book1 = [
 var book2 = [
 	{
 		"prop": 1,
-		"uri": "preset",
+		"uri": "placeholder.js",
 		"text": "tmp 1",
 		"title": "2.1 placeholder"
 	},
 	{
 		"prop": 2,
-		"uri": "preset",
+		"uri": "placeholder.js",
 		"text": "tmp 2",
 		"title": "2.2 placeholder"
 	}
