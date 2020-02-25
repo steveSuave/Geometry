@@ -298,6 +298,23 @@ Circle.prototype.getClosest = function (p) {
 
 
 /* =========================================================================== *
+ *                                   LITTERA                                   *
+ * =========================================================================== */
+
+function Text(txt){
+	this.text=txt;	
+	this.txt=true;
+}
+
+Text.prototype.draw = function td(ctx, color){
+	ctx.font = 'bold 13px Arial';
+	ctx.fillStyle = color || '#640303';
+	x = 10; y = 18;
+	ctx.fillText(this.text, x, y);
+}
+
+
+/* =========================================================================== *
  *                              TOOLBAR-CONTROLLER                             *
  * =========================================================================== */
 
@@ -602,23 +619,6 @@ function dynCanvasHeight() { return window.innerHeight * 0.777; }
 
 
 /* =========================================================================== *
- *                                   LITTERA                                   *
- * =========================================================================== */
-
-function Text(txt){
-	this.text=txt;	
-	this.txt=true;
-}
-
-Text.prototype.draw = function td(ctx, color){
-	ctx.font = 'bold 13px Arial';
-	ctx.fillStyle = color || '#640303';
-	x = 10; y = 18;
-	ctx.fillText(this.text, x, y);
-}
-
-
-/* =========================================================================== *
  *                                  ELECTIO                                    *
  * =========================================================================== */
 
@@ -646,6 +646,11 @@ function selectProp(obj) {
 	// clear previous content
 	toMove = [];
 	plaenController.objects = [];
+	console.clear();
+	console.log(
+		"to step through the proof/construction press <- or ->"
+	);
+	console.log("'R' reloads the proposition");
 	// load prop's steps
 	var s = document.createElement("script");
 	s.type = "text/javascript";
@@ -715,6 +720,11 @@ document.onkeydown = function (e) {
 		case 39: move(); break;
 		// left  arrow key
 		case 37: undo(); break;
+		// letter r, for reload
+		case 82:
+			let p = document.getElementById("props");
+			selectProp(p);
+			break;
 	}
 }
 

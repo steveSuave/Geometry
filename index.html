@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
+	<link rel="shortcut icon" href="#" />
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="app.js"></script>
 	<title>Plaen</title>
@@ -25,7 +26,7 @@
 	</div>
 	<canvas id="canvas"></canvas>
 	<div id="bottom">
-		<span class="lnx" onclick="nextOrPrev(false)">&lt;-- Prev</span>
+		<span class="lnx" onclick="nextOrPrev(false)">Prev</span>
 		<select id="books" class="index" onchange="loadProps(this)">
 			<option value="preset">Choose Book</option>
 			<option value="book1">Book 1</option>
@@ -34,7 +35,7 @@
 		<select id="props" class="index" onchange="selectProp(this)">
 			<option value="preset">Choose Prop</option>
 		</select>
-		<span class="lnx" onclick="nextOrPrev(true)">Next --&gt;</span>
+		<span class="lnx" onclick="nextOrPrev(true)">Next</span>
 	</div>
 
 	<script> load(); </script>
