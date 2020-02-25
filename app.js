@@ -270,16 +270,16 @@ Circle.prototype.intersect = function (obj) {
 	if (this.type > obj.type)
 		return obj.intersect(this);
 	else if (obj.type == 4) {
-		var w = (square(this.r)
+		var w = ( square(this.r)
 			- square(obj.r)
 			- square(this.o.x)
 			+ square(obj.o.x)
 			- square(this.o.y)
-			+ square(obj.o.y)) / 2;
+			+ square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
 		p.x = (w - l.y_intercept * (obj.o.y - this.o.y)) /
-			(obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
+		      (obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
 		p.y = l.slope * p.x + l.y_intercept;
 		var m = Line.defineLineVertical(l, p);
 		return this.intersect(m);
@@ -576,49 +576,6 @@ var black = '#000000';
 var white = '#FFFFFF';
 var brown = '#3e2a14';
 
-var bookList = [ book1, book2 ];
-
-var book1 = [
-	{
-		"prop": 1,
-		"uri": "book1/1.1_equilateral-triangle.js",
-		"text": "Prop 1",
-		"title": "1.1 Equilateral Triangle"
-	},
-	{
-		"prop": 2,
-		"uri": "book1/1.2_equal-line-from-point.js",
-		"text": "Prop 2",
-		"title": "1.2 Equal Line From Point"
-	}
-];
-var book2 = [
-	{
-		"prop": 1,
-		"uri": "placeholder.js",
-		"text": "tmp 1",
-		"title": "2.1 placeholder"
-	},
-	{
-		"prop": 2,
-		"uri": "placeholder.js",
-		"text": "tmp 2",
-		"title": "2.2 placeholder"
-	}
-];
-
-function Text(txt){
-	this.text=txt;	
-	this.txt=true;
-}
-
-Text.prototype.draw = function td(ctx, color){
-	ctx.font = 'bold 13px Arial';
-	ctx.fillStyle = color || '#640303';
-	x = 10; y = 18;
-	ctx.fillText(this.text, x, y);
-}
-
 function square(x) {
 	return x * x;
 }
@@ -626,12 +583,6 @@ function square(x) {
 function between(x, a, b) {
 	return x >= a && x <= b;
 }
-
-function dynCanvasWidth () { return window.innerWidth  * 0.777; }
-function dynCanvasHeight() { return window.innerHeight * 0.777; }
-
-// list to be filled with the steps of each proposition
-var toMove = [];
 
 // try to center the resulting design
 // TODO it mobile-friendly
@@ -645,6 +596,31 @@ function wherever() {
 	let randy = randomIntFromInterval(midy - midy * 0.3, midy + midy * 0.3);
 	return new Point(randx, randy);
 }
+
+function dynCanvasWidth () { return window.innerWidth  * 0.777; }
+function dynCanvasHeight() { return window.innerHeight * 0.777; }
+
+
+/* =========================================================================== *
+ *                                   LITTERA                                   *
+ * =========================================================================== */
+
+function Text(txt){
+	this.text=txt;	
+	this.txt=true;
+}
+
+Text.prototype.draw = function td(ctx, color){
+	ctx.font = 'bold 13px Arial';
+	ctx.fillStyle = color || '#640303';
+	x = 10; y = 18;
+	ctx.fillText(this.text, x, y);
+}
+
+
+/* =========================================================================== *
+ *                                  ELECTIO                                    *
+ * =========================================================================== */
 
 // load the propositions dropdown depending on book
 function loadProps(obj) {
@@ -686,7 +662,7 @@ function selectProp(obj) {
 // true is next false is prev
 function nextOrPrev(bool) {
 	let propsTag = document.getElementById("props");
-	let bookTag = document.getElementById("books");
+	let bookTag =  document.getElementById("books");
 	try { bool ? stepForward() : stepBackward(); }
 	catch (TypeError) {
 		// cannot iterate over template placeholders 
@@ -727,6 +703,11 @@ function nextOrPrev(bool) {
 	}
 }
 
+
+/* =========================================================================== *
+ *                                KEY-SHORTCUTS                                *
+ * =========================================================================== */
+
 document.onkeydown = function (e) {
 	e = e || window.event;
 	switch (e.keyCode) {
@@ -736,6 +717,9 @@ document.onkeydown = function (e) {
 		case 37: undo(); break;
 	}
 }
+
+// list to be filled with the steps of each proposition
+var toMove = [];
 
 function move() {
 	if (toMove.length == 0) return;
@@ -748,8 +732,13 @@ function undo() {
 	toMove.unshift(moveAgain);
 }
 
+
+/* =========================================================================== *
+ *                              LINE-INTERSECTIONS                             *
+ * =========================================================================== */
+
 function segRayHelper(linea, scale) {
-	if (linea.ray) { return scale > 0; }
+	if (linea.ray)     { return scale > 0; }
 	if (linea.segment) { return between(scale, 0, 1); }
 	return true;
 }
@@ -802,7 +791,7 @@ let lineIntersections = {
 		let b = - 2 * your.o.x
 			+ 2 * my.slope * my.y_intercept
 			- 2 * your.o.y * my.slope;
-		let c = square(your.o.x)
+		let c =   square(your.o.x)
 			+ square(my.y_intercept)
 			+ square(your.o.y)
 			- square(your.r)
@@ -903,3 +892,39 @@ let lineIntersections = {
 		}
 	}
 }
+
+
+/* =========================================================================== *
+ *                                    LIBRI                                    *
+ * =========================================================================== */
+
+var bookList = [ book1, book2 ];
+
+var book1 = [
+	{
+		"prop": 1,
+		"uri": "book1/1.1_equilateral-triangle.js",
+		"text": "Prop 1",
+		"title": "1.1 Equilateral Triangle"
+	},
+	{
+		"prop": 2,
+		"uri": "book1/1.2_equal-line-from-point.js",
+		"text": "Prop 2",
+		"title": "1.2 Equal Line From Point"
+	}
+];
+var book2 = [
+	{
+		"prop": 1,
+		"uri": "placeholder.js",
+		"text": "tmp 1",
+		"title": "2.1 placeholder"
+	},
+	{
+		"prop": 2,
+		"uri": "placeholder.js",
+		"text": "tmp 2",
+		"title": "2.2 placeholder"
+	}
+];
