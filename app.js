@@ -63,7 +63,7 @@ Point.prototype.draw = function (ctx, high) {
 	ctx.fillStyle = 'dark brown';
 	ctx.fill();
 	ctx.lineWidth = 2;
-	ctx.strokeStyle = this.colour || brown;
+	ctx.strokeStyle = this.colour || BROWN;
 	ctx.stroke();
 }
 
@@ -176,7 +176,7 @@ Line.prototype.draw = function (ctx, high) {
 		ctx.lineTo(2000, 2000 * this.slope + this.y_intercept);
 	}
 	ctx.lineWidth = high ? 3 : 2;
-	ctx.strokeStyle = this.colour || brown;
+	ctx.strokeStyle = this.colour || GRAY;
 	ctx.stroke();
 }
 
@@ -258,7 +258,7 @@ Circle.prototype.draw = function (ctx, high) {
 	ctx.beginPath();
 	ctx.arc(this.o.x, this.o.y, this.r, 0, 2 * Math.PI, false);
 	ctx.lineWidth = high ? 3 : 2;
-	ctx.strokeStyle = this.colour || brown;
+	ctx.strokeStyle = this.colour || GRAY;
 	ctx.stroke();
 }
 
@@ -271,11 +271,11 @@ Circle.prototype.intersect = function (obj) {
 		return obj.intersect(this);
 	else if (obj.type == 4) {
 		var w = ( square(this.r)
-			- square(obj.r)
-			- square(this.o.x)
-			+ square(obj.o.x)
-			- square(this.o.y)
-			+ square(obj.o.y) ) / 2;
+			    - square(obj.r)
+		    	- square(this.o.x)
+		    	+ square(obj.o.x)
+		        - square(this.o.y)
+			    + square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
 		p.x = (w - l.y_intercept * (obj.o.y - this.o.y)) /
@@ -319,7 +319,7 @@ Text.prototype.draw = function td(ctx, color){
  * =========================================================================== */
 
 ToolbarController = function (canvasObj) {
-	var tc = this
+	var tc = this;
 	this.canvasObj = canvasObj;
 	document.querySelectorAll("[data-action]").forEach(function (button) {
 		button.onclick = () => tc.actionClick(button);
@@ -586,12 +586,13 @@ function load() {
  * =========================================================================== */
 
 // CONSTANTS 
-var red   = '#770000';
-var green = '#007700';
-var blue  = '#000077';
-var black = '#000000';
-var white = '#FFFFFF';
-var brown = '#3e2a14';
+var RED   = '#770000';
+var GREEN = '#007700';
+var BLUE  = '#000077';
+var BLACK = '#000000';
+var WHITE = '#FFFFFF';
+var BROWN = '#3e2a14';
+var GRAY  = '#5b5b5b';
 
 function square(x) {
 	return x * x;
@@ -647,10 +648,12 @@ function selectProp(obj) {
 	toMove = [];
 	plaenController.objects = [];
 	console.clear();
+	console.log("'N' loads next proposition");
+	console.log("'P' loads previous proposition");
+	console.log("'R' reloads the proposition");
 	console.log(
 		"to step through the proof/construction press <- or ->"
 	);
-	console.log("'R' reloads the proposition");
 	// load prop's steps
 	var s = document.createElement("script");
 	s.type = "text/javascript";
@@ -725,6 +728,14 @@ document.onkeydown = function (e) {
 			let p = document.getElementById("props");
 			selectProp(p);
 			break;
+		// letter n, for next
+		case 78:
+			nextOrPrev(true);
+			break;
+		// letter p, for previous
+		case 80:
+			nextOrPrev(false);
+			break;
 	}
 }
 
@@ -786,8 +797,8 @@ let lineIntersections = {
 		let a = 1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-			+ square(your.o.x - my.x)
-			+ square(your.o.y);
+			    + square(your.o.x - my.x)
+			    + square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -799,13 +810,13 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-			+ 2 * my.slope * my.y_intercept
-			- 2 * your.o.y * my.slope;
+			    + 2 * my.slope * my.y_intercept
+			    - 2 * your.o.y * my.slope;
 		let c =   square(your.o.x)
-			+ square(my.y_intercept)
-			+ square(your.o.y)
-			- square(your.r)
-			- 2 * my.y_intercept * your.o.y;
+			    + square(my.y_intercept)
+			    + square(your.o.y)
+			    - square(your.r)
+			    - 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
