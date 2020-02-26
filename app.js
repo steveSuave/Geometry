@@ -923,6 +923,12 @@ var book1 = [
 		"uri": "book1/1.2_equal-line-from-point.js",
 		"text": "Prop 2",
 		"title": "1.2 Equal Line From Point"
+	},
+	{
+		"prop": 3,
+		"uri": "book1/1.3_greater-equal-to-lesser.js",
+		"text": "Prop 3",
+		"title": "1.3 Make Greater Equal To Lesser"
 	}
 ];
 var book2 = [
