@@ -2,44 +2,46 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<link rel="shortcut icon" href="#" />
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="app.js"></script>
-	<title>Plaen</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="app.js"></script>
+    <title>Plaen</title>
 </head>
 
 <body>
-	<div id="panel">
-		<img src="dist/resources/points.png" class="button" data-action="point" />
-		<img src="dist/resources/middle.png" class="button" data-action="middlePoint" />
-		<img src="dist/resources/intersection.png" class="button" data-action="intersectObjects" />
-		<img src="dist/resources/line.png" class="button" data-action="twoPointLine" />
-		<img src="dist/resources/normal.png" class="button" data-action="verticalLine" />
-		<img src="dist/resources/paralel.png" class="button" data-action="paralelLine" />
-		<img src="dist/resources/segment-bisector.png" class="button" data-action="segmentBisector" />
-		<img src="dist/resources/angle-bisector.png" class="button" data-action="angleBisector" />
-		<img src="dist/resources/circleCenterPoint.png" class="button" data-action="circleTwoPoint" />
-		<img src="dist/resources/circle-three-point.png" class="button" data-action="circleThreePoint" />
-		<img src="dist/resources/compass.png" class="button" data-action="circleCompass" />
-		<img src="dist/resources/erase.png" class="button" data-actionremove />
-	</div>
-	<canvas id="canvas"></canvas>
-	<div id="bottom">
-		<span class="lnx" onclick="nextOrPrev(false)">Prev</span>
-		<select id="books" class="index" onchange="loadProps(this)">
-			<option value="preset">Choose Book</option>
-			<option value="book1">Book 1</option>
-			<option value="book2">Book 2</option>
-		</select>
-		<select id="props" class="index" onchange="selectProp(this)">
-			<option value="preset">Choose Prop</option>
-		</select>
-		<span class="lnx" onclick="nextOrPrev(true)">Next</span>
-	</div>
+    <div id="panel">
+        <img src="dist/resources/points.png" class="button" data-action="point" />
+        <img src="dist/resources/middle.png" class="button" data-action="middlePoint" />
+        <img src="dist/resources/intersection.png" class="button" data-action="intersectObjects" />
+        <img src="dist/resources/line.png" class="button" data-action="twoPointLine" />
+        <img src="dist/resources/normal.png" class="button" data-action="verticalLine" />
+        <img src="dist/resources/paralel.png" class="button" data-action="paralelLine" />
+        <img src="dist/resources/segment-bisector.png" class="button" data-action="segmentBisector" />
+        <img src="dist/resources/angle-bisector.png" class="button" data-action="angleBisector" />
+        <img src="dist/resources/circleCenterPoint.png" class="button" data-action="circleTwoPoint" />
+        <img src="dist/resources/circle-three-point.png" class="button" data-action="circleThreePoint" />
+        <img src="dist/resources/compass.png" class="button" data-action="circleCompass" />
+        <img src="dist/resources/erase.png" class="button" data-actionremove />
+    </div>
+    <canvas id="canvas" title="press 'R' to clear canvas / reload a proposition"></canvas>
+    <div id="bottom">
+        <span class="lnx" title="step back (press &lt;-)" onclick="undo()">&lt;</span>
+        <span class="lnx" title="previous prop 'P'" onclick="nextOrPrev(false)">Prev</span>
+        <select id="books" class="index" onchange="loadProps(this)">
+            <option value="preset">Choose Book</option>
+            <option value="book1">Book 1</option>
+            <option value="book2">Book 2</option>
+        </select>
+        <select id="props" class="index" onchange="selectProp(this)">
+            <option value="preset">Choose Prop</option>
+        </select>
+        <span class="lnx" title="next prop 'N'" onclick="nextOrPrev(true)">Next</span>
+        <span class="lnx" title="step ahead (press -&gt;)" onclick="move()">&gt;</span>
+    </div>
 
-	<script> load(); </script>
-	<div id="propScript"></div>
+    <script> load(); </script>
+    <div id="propScript"></div>
 </body>
 
 </html>
