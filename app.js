@@ -647,13 +647,6 @@ function selectProp(obj) {
 	// clear previous content
 	toMove = [];
 	plaenController.objects = [];
-	console.clear();
-	console.log("'N' loads next proposition");
-	console.log("'P' loads previous proposition");
-	console.log("'R' reloads the proposition");
-	console.log(
-		"to step through the proof/construction press <- or ->"
-	);
 	// load prop's steps
 	var s = document.createElement("script");
 	s.type = "text/javascript";
@@ -726,16 +719,13 @@ document.onkeydown = function (e) {
 		// letter r, for reload
 		case 82:
 			let p = document.getElementById("props");
-			selectProp(p);
-			break;
+			selectProp(p); break;
 		// letter n, for next
 		case 78:
-			nextOrPrev(true);
-			break;
+			nextOrPrev(true); break;
 		// letter p, for previous
 		case 80:
-			nextOrPrev(false);
-			break;
+			nextOrPrev(false); break;
 	}
 }
 
