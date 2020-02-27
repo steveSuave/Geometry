@@ -103,6 +103,9 @@ Line.defineTwoPoints = function (a, b, colour) {
 Line.defineSegment = function (a, b, colour) {
 	var l = Line.defineTwoPoints(a, b, colour);
 	l.segment = true;
+	l.len = function () {
+		return this.a.dist(this.b).toFixed(7);
+	}
 	return l;
 }
 

@@ -23,19 +23,14 @@ var theSmall = theDecision[2];
 theSmall.colour = theDecision[3];
 
 var difference = a.dist(b) < c.dist(d) ? a.dist(b) : c.dist(d);
-
 var radius = new Point(theBig.a.x - difference, theBig.a.y);
-
 var equalToB = Line.defineSegment(theBig.a, radius, theSmall.colour);
-
 var theCircle = Circle.defineTwoPoint(theBig.a, radius);
-
 var theCut = theCircle.intersect(theBig)[0];
-
 var segment3 = Line.defineSegment(theBig.a, theCut, theSmall.colour);
 
 toMove = [
    a, b, segmentA, c, d, segmentB, radius, equalToB, theCircle, theCut, segment3
 ];
 
-console.assert(theSmall.a.dist(theSmall.b).toFixed(7) == theBig.a.dist(theCut).toFixed(7));
+console.assert(theSmall.len() == segment3.len());

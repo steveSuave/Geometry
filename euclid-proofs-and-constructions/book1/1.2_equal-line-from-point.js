@@ -31,4 +31,4 @@ toMove = [
     ray1, ray2, circle1, rayCut, circle2, finalPoint, finalSegment
 ];
 
-console.assert(c.dist(finalPoint).toFixed(7) == a.dist(b).toFixed(7));
+console.assert(finalSegment.len() == initialSegment.len());

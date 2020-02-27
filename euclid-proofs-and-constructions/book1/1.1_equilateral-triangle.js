@@ -16,4 +16,7 @@ var equiSide3 = Line.defineSegment(a, b, RED);
 
 toMove = [a, b, theLine, the1Circle, the2Circle, cut, equiSide1, equiSide2, equiSide3];
 
-// add console.assert
+console.assert(
+    equiSide1.len() == equiSide2.len() &&
+    equiSide1.len() == equiSide3.len()
+);
