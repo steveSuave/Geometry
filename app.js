@@ -273,16 +273,16 @@ Circle.prototype.intersect = function (obj) {
 	if (this.type > obj.type)
 		return obj.intersect(this);
 	else if (obj.type == 4) {
-		var w = ( square(this.r)
-			    - square(obj.r)
-		    	- square(this.o.x)
-		    	+ square(obj.o.x)
-		        - square(this.o.y)
-			    + square(obj.o.y) ) / 2;
+		var w = (square(this.r)
+			- square(obj.r)
+			- square(this.o.x)
+			+ square(obj.o.x)
+			- square(this.o.y)
+			+ square(obj.o.y)) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
 		p.x = (w - l.y_intercept * (obj.o.y - this.o.y)) /
-		      (obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
+			(obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
 		p.y = l.slope * p.x + l.y_intercept;
 		var m = Line.defineLineVertical(l, p);
 		return this.intersect(m);
@@ -304,12 +304,12 @@ Circle.prototype.getClosest = function (p) {
  *                                   LITTERA                                   *
  * =========================================================================== */
 
-function Text(txt){
-	this.text=txt;	
-	this.txt=true;
+function Text(txt) {
+	this.text = txt;
+	this.txt = true;
 }
 
-Text.prototype.draw = function td(ctx, color){
+Text.prototype.draw = function td(ctx, color) {
 	ctx.font = 'bold 13px Arial';
 	ctx.fillStyle = color || '#640303';
 	x = 10; y = 18;
@@ -589,13 +589,13 @@ function load() {
  * =========================================================================== */
 
 // CONSTANTS 
-var RED   = '#770000';
+var RED = '#770000';
 var GREEN = '#007700';
-var BLUE  = '#000077';
+var BLUE = '#000077';
 var BLACK = '#000000';
 var WHITE = '#FFFFFF';
 var BROWN = '#3e2a14';
-var GRAY  = '#5b5b5b';
+var GRAY = '#5b5b5b';
 
 function square(x) {
 	return x * x;
@@ -603,6 +603,11 @@ function square(x) {
 
 function between(x, a, b) {
 	return x >= a && x <= b;
+}
+
+// start propositions with necessary elements already drawn
+function bootstrap(ar) {
+	ar.forEach(e => plaenController.addObject(e));
 }
 
 // try to center the resulting design
@@ -618,7 +623,7 @@ function wherever() {
 	return new Point(randx, randy);
 }
 
-function dynCanvasWidth () { return window.innerWidth  * 0.777; }
+function dynCanvasWidth() { return window.innerWidth * 0.777; }
 function dynCanvasHeight() { return window.innerHeight * 0.777; }
 
 
@@ -630,17 +635,17 @@ function dynCanvasHeight() { return window.innerHeight * 0.777; }
 function loadProps(obj) {
 	let propsTag = document.getElementById("props");
 	// keep the "choose a prop" option
-	while (propsTag.options.length > 1) { propsTag.remove(1); }  
-	let book = obj.value;
-	if (!window[book]) {
+	while (propsTag.options.length > 1) { propsTag.remove(1); }
+	let num = obj.options[obj.selectedIndex].value;
+	if (!book[num]) {
 		plaenController.textObjects = [];
 		return;
 	}
-	for (let prop of window[book]) {
+	for (var prop in book[num]) {
 		var opt = document.createElement("option");
-		opt.text  = prop["text"];
-		opt.value = prop["uri"];
-		opt.title = prop["title"];
+		opt.text = book[num][prop].text;
+		opt.value = book[num][prop].uri;
+		opt.title = book[num][prop].title;
 		propsTag.appendChild(opt);
 	}
 }
@@ -653,7 +658,8 @@ function selectProp(obj) {
 	// load prop's steps
 	var s = document.createElement("script");
 	s.type = "text/javascript";
-	s.src  = "euclid-proofs-and-constructions/" + obj.value;
+	s.src = "euclid-proofs-and-constructions/" + obj.value;
+	// or to be exact: + obj.options[obj.selectedIndex].value;
 	document.getElementById("propScript").innerHTML = "";
 	document.getElementById("propScript").appendChild(s);
 	// maybe abstract the whole empty->redraw
@@ -666,7 +672,7 @@ function selectProp(obj) {
 // true is next false is prev
 function nextOrPrev(bool) {
 	let propsTag = document.getElementById("props");
-	let bookTag =  document.getElementById("books");
+	let bookTag = document.getElementById("books");
 	try { bool ? stepForward() : stepBackward(); }
 	catch (TypeError) {
 		// cannot iterate over template placeholders 
@@ -736,7 +742,12 @@ document.onkeydown = function (e) {
 var toMove = [];
 
 function move() {
-	if (toMove.length == 0) return;
+	if (toMove.length == 0) 
+		return;
+	if (Array.isArray(toMove[0])){
+		bootstrap(toMove.shift());
+		return;
+	}
 	plaenController.addObject(toMove.shift());
 }
 
@@ -752,7 +763,7 @@ function undo() {
  * =========================================================================== */
 
 function segRayHelper(linea, scale) {
-	if (linea.ray)     { return scale > 0; }
+	if (linea.ray) { return scale > 0; }
 	if (linea.segment) { return between(scale, 0, 1); }
 	return true;
 }
@@ -790,8 +801,8 @@ let lineIntersections = {
 		let a = 1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-			    + square(your.o.x - my.x)
-			    + square(your.o.y);
+			+ square(your.o.x - my.x)
+			+ square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -803,13 +814,13 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-			    + 2 * my.slope * my.y_intercept
-			    - 2 * your.o.y * my.slope;
-		let c =   square(your.o.x)
-			    + square(my.y_intercept)
-			    + square(your.o.y)
-			    - square(your.r)
-			    - 2 * my.y_intercept * your.o.y;
+			+ 2 * my.slope * my.y_intercept
+			- 2 * your.o.y * my.slope;
+		let c = square(your.o.x)
+			+ square(my.y_intercept)
+			+ square(your.o.y)
+			- square(your.r)
+			- 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -912,39 +923,59 @@ let lineIntersections = {
  *                                    LIBRI                                    *
  * =========================================================================== */
 
-var bookList = [ book1, book2 ];
-
-var book1 = [
-	{
-		"prop": 1,
-		"uri": "book1/1.1_equilateral-triangle.js",
-		"text": "Prop 1",
-		"title": "1.1 Equilateral Triangle"
+var book = {
+	"1": {
+		"prop1": {
+			"uri": "book1/1.1_equilateral-triangle.js",
+			"text": "Prop 1",
+			"title": "1.1 Equilateral Triangle",
+			"gist": function (line, color) {
+				var the1Circle = Circle.defineTwoPoint(line.b, line.a);
+				var the2Circle = Circle.defineTwoPoint(line.a, line.b);
+				var cut = the1Circle.intersect(the2Circle)[0];
+				var equiSide1 = Line.defineSegment(line.a, cut, color);
+				var equiSide2 = Line.defineSegment(cut, line.b, color);
+				var equiSide3 = Line.defineSegment(line.a, line.b, color);
+				return [equiSide1, equiSide2, equiSide3];
+			}
+		},
+		"prop2": {
+			"uri": "book1/1.2_equal-line-from-point.js",
+			"text": "Prop 2",
+			"title": "1.2 Equal Line From Point",
+			"gist": function (line, point, color) {
+				var theEquiCircle1 = Circle.defineTwoPoint(point, line.a);
+				var theEquiCircle2 = Circle.defineTwoPoint(line.a, point);
+				var equiCut = theEquiCircle1.intersect(theEquiCircle2)[0];
+				var ray1 = Line.defineRay(equiCut, line.a);
+				var ray2 = Line.defineRay(equiCut, point);
+				var circle1 = Circle.defineTwoPoint(line.a, line.b);
+				var rayCut = circle1.intersect(ray1)[0];
+				var circle2 = Circle.defineTwoPoint(equiCut, rayCut);
+				var finalPoint = circle2.intersect(ray2)[0];
+				var finalSegment = Line.defineSegment(point, finalPoint, color);
+				return [finalSegment];
+			}
+		},
+		"prop3": {
+			"uri": "book1/1.3_greater-equal-to-lesser.js",
+			"text": "Prop 3",
+			"title": "1.3 Make Greater Equal To Lesser",
+			"gist": function () { }
+		}
 	},
-	{
-		"prop": 2,
-		"uri": "book1/1.2_equal-line-from-point.js",
-		"text": "Prop 2",
-		"title": "1.2 Equal Line From Point"
-	},
-	{
-		"prop": 3,
-		"uri": "book1/1.3_greater-equal-to-lesser.js",
-		"text": "Prop 3",
-		"title": "1.3 Make Greater Equal To Lesser"
+	"2": {
+		"prop1": {
+			"uri": "placeholder.js",
+			"text": "tmp 1",
+			"title": "2.1 placeholder",
+			"gist": function () { }
+		},
+		"prop2": {
+			"uri": "placeholder.js",
+			"text": "tmp 2",
+			"title": "2.2 placeholder",
+			"gist": function () { }
+		}
 	}
-];
-var book2 = [
-	{
-		"prop": 1,
-		"uri": "placeholder.js",
-		"text": "tmp 1",
-		"title": "2.1 placeholder"
-	},
-	{
-		"prop": 2,
-		"uri": "placeholder.js",
-		"text": "tmp 2",
-		"title": "2.2 placeholder"
-	}
-];
+};

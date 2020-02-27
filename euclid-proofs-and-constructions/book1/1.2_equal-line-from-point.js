@@ -2,11 +2,15 @@
  *        Equal Line From Point       *
  * ================================== */
 
+
 var a = wherever();
 var b = wherever();
 var initialSegment = Line.defineSegment(a, b, RED);
 
 var c = wherever();
+
+bootstrap([a, b, initialSegment, c]);
+
 var connect = Line.defineSegment(a, c, BLUE);
 
 var theEquiCircle1 = Circle.defineTwoPoint(c, a);
@@ -27,8 +31,8 @@ var finalPoint = circle2.intersect(ray2)[0];
 var finalSegment = Line.defineSegment(c, finalPoint, RED);
 
 toMove = [
-    a, b, initialSegment, c, connect, equiSideOne, equiSideTwo, equiCut,
-    ray1, ray2, circle1, rayCut, circle2, finalPoint, finalSegment
+    connect, equiSideOne, equiSideTwo, equiCut, ray1, ray2,
+    circle1, rayCut, circle2, finalPoint, finalSegment
 ];
 
 console.assert(finalSegment.len() == initialSegment.len());
