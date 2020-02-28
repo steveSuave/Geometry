@@ -273,16 +273,16 @@ Circle.prototype.intersect = function (obj) {
 	if (this.type > obj.type)
 		return obj.intersect(this);
 	else if (obj.type == 4) {
-		var w = (square(this.r)
-			- square(obj.r)
-			- square(this.o.x)
-			+ square(obj.o.x)
-			- square(this.o.y)
-			+ square(obj.o.y)) / 2;
+		var w = ( square(this.r)
+			    - square(obj.r)
+		    	- square(this.o.x)
+			    + square(obj.o.x)
+			    - square(this.o.y)
+			    + square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
 		p.x = (w - l.y_intercept * (obj.o.y - this.o.y)) /
-			(obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
+		    (obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
 		p.y = l.slope * p.x + l.y_intercept;
 		var m = Line.defineLineVertical(l, p);
 		return this.intersect(m);
@@ -301,12 +301,63 @@ Circle.prototype.getClosest = function (p) {
 
 
 /* =========================================================================== *
+ *                                   ANGULUS                                   *
+ * =========================================================================== */
+
+function Angle(c, p1, p2, color) {
+    this.c = c;
+    this.p1 = p1;
+	this.p2 = p2;
+	this.color = color || GRAY;
+	let d1 = c.vectorTo(p1);
+	let d2 = c.vectorTo(p2);
+    this.a1 = Math.atan2(d1.y, d1.x);
+    this.a2 = Math.atan2(d2.y, d2.x);
+	this.indy = true;
+}
+
+Angle.defineTwoLines = function (l1, l2) {
+    let lcut = l1.intersect(l2)[0];
+    let crcl = Circle.defineTwoPoint(lcut, lcut.scale(0.1));
+    let ccut1 = crcl.intersect(l1)[0];
+    let ccut2 = crcl.intersect(l2)[0];
+    return new Angle(lcut, ccut1, ccut2);
+}
+
+Angle.prototype.draw = function (ctx) {
+	// ctx.save();
+	var start, end, bool;
+	if (this.a1 < this.a2) {
+		start = this.a1;
+		end = this.a2;
+		if (this.a1 < -Math.PI/2 && this.a2 > Math.PI/2){
+			bool=true;
+		}
+	} else {
+		start = this.a2;
+		end = this.a1;
+		if (this.a2 < -Math.PI/2 && this.a1 > Math.PI/2){
+			bool=true;
+		}
+	}
+	ctx.beginPath();
+    ctx.moveTo(this.c.x, this.c.y);
+    ctx.arc(this.c.x, this.c.y, 20, start, end, bool);
+    ctx.closePath();
+    ctx.fillStyle = this.color || BROWN;
+    ctx.globalAlpha = 0.777;
+    ctx.fill();
+    // ctx.restore();
+}
+
+
+/* =========================================================================== *
  *                                   LITTERA                                   *
  * =========================================================================== */
 
 function Text(txt) {
 	this.text = txt;
-	this.txt = true;
+	this.indy = true;
 }
 
 Text.prototype.draw = function td(ctx, color) {
@@ -444,7 +495,7 @@ function selectObject(pointer, objects, allowedTypes) {
 function PlaenController(canvasElement) {
 	this.canvasElement = canvasElement;
 	this.objects = [];
-	this.textObjects = [];
+	this.indyObjects = [];
 	this.selectType = 0;
 
 	this.canvasElement.addEventListener("mousedown", this, false);
@@ -557,8 +608,8 @@ PlaenController.prototype.redraw = function () {
 		this.objects[i].draw(this.ctx);
 	if (highlighted != undefined && highlighted.type == 1)
 		highlighted.draw(this.ctx, 'high');
-	if (this.textObjects.length > 0)
-		this.textObjects.forEach(el => el.draw(this.ctx));
+	if (this.indyObjects.length > 0)
+		this.indyObjects.forEach(el => el.draw(this.ctx));
 }
 
 PlaenController.prototype.asyncSelectObject = function (type) {
@@ -571,8 +622,8 @@ PlaenController.prototype.asyncSelectObject = function (type) {
 }
 
 PlaenController.prototype.addObject = function (obj) {
-	if (obj.txt)
-		this.textObjects.push(obj);
+	if (obj.indy)
+		this.indyObjects.push(obj);
 	else
 		this.objects.push(obj);
 }
@@ -589,16 +640,20 @@ function load() {
  * =========================================================================== */
 
 // CONSTANTS 
-var RED = '#770000';
+var RED   = '#770000';
 var GREEN = '#007700';
-var BLUE = '#000077';
+var BLUE  = '#000077';
 var BLACK = '#000000';
 var WHITE = '#FFFFFF';
 var BROWN = '#3e2a14';
-var GRAY = '#5b5b5b';
+var GRAY  = '#5b5b5b';
 
 function square(x) {
 	return x * x;
+}
+
+function toDegs(rads) {
+	return rads * 180 / Math.PI;
 }
 
 function between(x, a, b) {
@@ -616,14 +671,14 @@ function wherever() {
 	function randomIntFromInterval(min, max) {
 		return Math.random() * (max - min + 1) + min;
 	}
-	let midx = dynCanvasWidth() / 2;
+	let midx = dynCanvasWidth () / 2;
 	let midy = dynCanvasHeight() / 2;
 	let randx = randomIntFromInterval(midx - midx * 0.3, midx + midx * 0.3);
 	let randy = randomIntFromInterval(midy - midy * 0.3, midy + midy * 0.3);
 	return new Point(randx, randy);
 }
 
-function dynCanvasWidth() { return window.innerWidth * 0.777; }
+function dynCanvasWidth () { return window.innerWidth  * 0.777; }
 function dynCanvasHeight() { return window.innerHeight * 0.777; }
 
 
@@ -638,12 +693,12 @@ function loadProps(obj) {
 	while (propsTag.options.length > 1) { propsTag.remove(1); }
 	let num = obj.options[obj.selectedIndex].value;
 	if (!book[num]) {
-		plaenController.textObjects = [];
+		plaenController.indyObjects = [];
 		return;
 	}
 	for (var prop in book[num]) {
 		var opt = document.createElement("option");
-		opt.text = book[num][prop].text;
+		opt.text  = book[num][prop].text;
 		opt.value = book[num][prop].uri;
 		opt.title = book[num][prop].title;
 		propsTag.appendChild(opt);
@@ -662,8 +717,7 @@ function selectProp(obj) {
 	// or to be exact: + obj.options[obj.selectedIndex].value;
 	document.getElementById("propScript").innerHTML = "";
 	document.getElementById("propScript").appendChild(s);
-	// maybe abstract the whole empty->redraw
-	plaenController.textObjects = [];
+	plaenController.indyObjects = [];
 	plaenController.addObject(
 		new Text(obj.options[obj.selectedIndex].title)
 	);
@@ -672,7 +726,7 @@ function selectProp(obj) {
 // true is next false is prev
 function nextOrPrev(bool) {
 	let propsTag = document.getElementById("props");
-	let bookTag = document.getElementById("books");
+	let bookTag  = document.getElementById("books");
 	try { bool ? stepForward() : stepBackward(); }
 	catch (TypeError) {
 		// cannot iterate over template placeholders 
@@ -684,7 +738,7 @@ function nextOrPrev(bool) {
 	function stepForward() {
 		// if end of props go to next book first prop
 		if (propsTag.selectedIndex == propsTag.length - 1) {
-			bookTag.selectedIndex == bookTag.length - 1 ?
+			bookTag.selectedIndex  ==  bookTag.length - 1 ?
 				bookTag.selectedIndex = 1 :
 				bookTag.selectedIndex++;
 			loadProps(bookTag);
@@ -699,7 +753,7 @@ function nextOrPrev(bool) {
 	function stepBackward() {
 		// if start of props go to prev book last prop
 		if (propsTag.selectedIndex <= 1) {
-			bookTag.selectedIndex <= 1 ?
+			bookTag.selectedIndex  <= 1 ?
 				bookTag.selectedIndex = bookTag.length - 1 :
 				bookTag.selectedIndex--;
 			loadProps(bookTag);
@@ -762,9 +816,9 @@ function undo() {
  *                              LINE-INTERSECTIONS                             *
  * =========================================================================== */
 
-function segRayHelper(linea, scale) {
-	if (linea.ray) { return scale > 0; }
-	if (linea.segment) { return between(scale, 0, 1); }
+function segRayHelper(line, scale) {
+	if (line.ray)     { return scale > 0; }
+	if (line.segment) { return between(scale, 0, 1); }
 	return true;
 }
 
@@ -801,8 +855,8 @@ let lineIntersections = {
 		let a = 1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-			+ square(your.o.x - my.x)
-			+ square(your.o.y);
+			    + square(your.o.x - my.x)
+			    + square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -814,13 +868,13 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-			+ 2 * my.slope * my.y_intercept
-			- 2 * your.o.y * my.slope;
+			    + 2 * my.slope * my.y_intercept
+			    - 2 * your.o.y * my.slope;
 		let c = square(your.o.x)
-			+ square(my.y_intercept)
-			+ square(your.o.y)
-			- square(your.r)
-			- 2 * my.y_intercept * your.o.y;
+		      + square(my.y_intercept)
+		  	  + square(your.o.y)
+		      - square(your.r)
+		      - 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -839,16 +893,16 @@ let lineIntersections = {
 	},
 	segsAndRays: function sar(my, your) {
 		/* 
-		 will use line's parametric equations
-		 we start with 
-		 p + t r = q + u s
-		 where p,r,q,s are vectors
-		 and t and u are scalar parameters
-		 then (p + t r) × s = (q + u s) × s
-		 (where x is the cross product)
-		 s x s = 0 -> solve for t
-		 t x t = 0 -> solve for u 
-		*/
+		 *  We'll use line's parametric equations
+		 *  we start with 
+		 *  p + t r = q + u s
+		 *  where p,r,q,s are vectors
+		 *  and t and u are scalar parameters
+		 *  then (p + t r) × s = (q + u s) × s
+		 *  (where x is the cross product)
+		 *  s x s = 0 -> solve for t
+		 *  t x t = 0 -> solve for u 
+		 */
 
 		let firstVec = my.a.vectorTo(my.b);
 		let secVec = your.a.vectorTo(your.b);
@@ -875,24 +929,24 @@ let lineIntersections = {
 		let d = my.a.vectorTo(my.b);
 		let f = your.o.vectorTo(my.a);
 		/*
-		 after plugging line's parametric equations:
-		 p = my.a + d * t ->
-		 Px = my.a.x + t*d.x, Py = my.a.y + t*d.y
-		 into circle's general equation x,y: 
-		 (x - h)**2 + (y - k)**2 = r**2
-		 (where h,k the center of circle)
-		 after much expansion we get:
-		 (d.d) * t**2 + (f.d) * 2t + (f.f - r**2) = 0
-		 where . is the dot product
-		 consequently:
-		*/
+		 *  After plugging line's parametric equations:
+		 *  p = my.a + d * t ->
+		 *  Px = my.a.x + t*d.x, Py = my.a.y + t*d.y
+		 *  into circle's general equation x,y: 
+		 *  (x - h)**2 + (y - k)**2 = r**2
+		 *  (where h,k the center of circle)
+		 *  after much expansion we get:
+		 *  (d.d) * t**2 + (f.d) * 2t + (f.f - r**2) = 0
+		 *  where . is the dot product
+		 *  consequently:
+		 */
 		let a = d.vectorDotProd(d);
 		let b = 2 * f.vectorDotProd(d);
 		let c = f.vectorDotProd(f) - square(your.r);
 
 		let discriminant = b * b - 4 * a * c;
 
-		if (discriminant < 0) { return []; }
+		if (discriminant <  0) { return []; }
 		if (discriminant == 0) {
 			let t = -b / (2 * a);
 			if (segRayHelper(my, t)) {
@@ -936,7 +990,7 @@ var book = {
 				var equiSide1 = Line.defineSegment(line.a, cut, color);
 				var equiSide2 = Line.defineSegment(cut, line.b, color);
 				var equiSide3 = Line.defineSegment(line.a, line.b, color);
-				return [equiSide1, equiSide2, equiSide3];
+				return [equiSide3.a, equiSide3.b, cut, equiSide1, equiSide2, equiSide3];
 			}
 		},
 		"prop2": {
