@@ -24,10 +24,6 @@ theBig.colour = theDecision[1];
 var theSmall = theDecision[2];
 theSmall.colour = theDecision[3];
 
-// var difference = a.dist(b) < c.dist(d) ? a.dist(b) : c.dist(d);
-// var radius = new Point(theBig.a.x - difference, theBig.a.y);
-// var equalToB = Line.defineSegment(theBig.a, radius, theSmall.colour);
-
 var equalToB = book[1].prop2.gist(theSmall, theBig.a, theSmall.colour)[0];
 
 var theCircle = Circle.defineTwoPoint(theBig.a, equalToB.b);

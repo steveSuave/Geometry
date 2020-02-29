@@ -316,36 +316,30 @@ function Angle(c, p1, p2, color) {
 	this.indy = true;
 }
 
-Angle.defineTwoLines = function (l1, l2) {
-    let lcut = l1.intersect(l2)[0];
-    let crcl = Circle.defineTwoPoint(lcut, lcut.scale(0.1));
-    let ccut1 = crcl.intersect(l1)[0];
-    let ccut2 = crcl.intersect(l2)[0];
-    return new Angle(lcut, ccut1, ccut2);
-}
-
 Angle.prototype.draw = function (ctx) {
 	// ctx.save();
-	var start, end, bool;
+	let start, end, anticlock;
 	if (this.a1 < this.a2) {
 		start = this.a1;
 		end = this.a2;
-		if (this.a1 < -Math.PI/2 && this.a2 > Math.PI/2){
-			bool=true;
+		// choose the angle < 180 (for triangles)
+		if (Math.abs(this.a1-this.a2) > Math.PI){
+			anticlock=true;
 		}
 	} else {
 		start = this.a2;
 		end = this.a1;
-		if (this.a2 < -Math.PI/2 && this.a1 > Math.PI/2){
-			bool=true;
+		// choose the angle < 180 (for triangles)
+		if (Math.abs(this.a1-this.a2) > Math.PI){
+			anticlock=true;
 		}
 	}
 	ctx.beginPath();
     ctx.moveTo(this.c.x, this.c.y);
-    ctx.arc(this.c.x, this.c.y, 20, start, end, bool);
+    ctx.arc(this.c.x, this.c.y, 20, start, end, anticlock);
     ctx.closePath();
     ctx.fillStyle = this.color || BROWN;
-    ctx.globalAlpha = 0.777;
+    ctx.globalAlpha = 0.6;
     ctx.fill();
     // ctx.restore();
 }
@@ -1015,6 +1009,12 @@ var book = {
 			"uri": "book1/1.3_greater-equal-to-lesser.js",
 			"text": "Prop 3",
 			"title": "1.3 Make Greater Equal To Lesser",
+			"gist": function () { }
+		},
+		"prop4": {
+			"uri": "book1/1.4_equal-triangles.js",
+			"text": "Prop 4",
+			"title": "1.4 Two Sides & Containing Angle",
 			"gist": function () { }
 		}
 	},
