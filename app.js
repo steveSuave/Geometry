@@ -317,31 +317,33 @@ function Angle(c, p1, p2, color) {
 }
 
 Angle.prototype.draw = function (ctx) {
-	// ctx.save();
+	// calculate angle's shadow radius
+	let line = Line.defineTwoPoints(this.p1, this.p2);
+	let vertical = Line.defineLineVertical(line, this.c);
+	let sect = line.intersect(vertical)[0];
+	let vertDist = this.c.dist(sect);
+	let angRad = vertDist * 0.4;
+
+	// choose the angle < 180 (for triangles)
 	let start, end, anticlock;
 	if (this.a1 < this.a2) {
 		start = this.a1;
 		end = this.a2;
-		// choose the angle < 180 (for triangles)
-		if (Math.abs(this.a1-this.a2) > Math.PI){
+		if (Math.abs(this.a1-this.a2) > Math.PI)
 			anticlock=true;
-		}
 	} else {
 		start = this.a2;
 		end = this.a1;
-		// choose the angle < 180 (for triangles)
-		if (Math.abs(this.a1-this.a2) > Math.PI){
+		if (Math.abs(this.a1-this.a2) > Math.PI)
 			anticlock=true;
-		}
 	}
 	ctx.beginPath();
     ctx.moveTo(this.c.x, this.c.y);
-    ctx.arc(this.c.x, this.c.y, 20, start, end, anticlock);
+    ctx.arc(this.c.x, this.c.y, angRad, start, end, anticlock);
     ctx.closePath();
-    ctx.fillStyle = this.color || BROWN;
+    ctx.fillStyle = this.color || GRAY;
     ctx.globalAlpha = 0.6;
     ctx.fill();
-    // ctx.restore();
 }
 
 
