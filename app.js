@@ -274,14 +274,14 @@ Circle.prototype.intersect = function (obj) {
 		return obj.intersect(this);
 	else if (obj.type == 4) {
 		var w = ( square(this.r)
-			    - square(obj.r)
+			- square(obj.r)
 		    	- square(this.o.x)
-			    + square(obj.o.x)
-			    - square(this.o.y)
-			    + square(obj.o.y) ) / 2;
+			+ square(obj.o.x)
+			- square(this.o.y)
+		        + square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
-		p.x = (w - l.y_intercept * (obj.o.y - this.o.y)) /
+		p.x =    (w - l.y_intercept * (obj.o.y - this.o.y)) /
 		    (obj.o.x - this.o.x + l.slope * (obj.o.y - this.o.y));
 		p.y = l.slope * p.x + l.y_intercept;
 		var m = Line.defineLineVertical(l, p);
@@ -305,14 +305,14 @@ Circle.prototype.getClosest = function (p) {
  * =========================================================================== */
 
 function Angle(c, p1, p2, color) {
-    this.c = c;
-    this.p1 = p1;
+	this.c = c;
+	this.p1 = p1;
 	this.p2 = p2;
 	this.color = color || GRAY;
 	let d1 = c.vectorTo(p1);
 	let d2 = c.vectorTo(p2);
-    this.a1 = Math.atan2(d1.y, d1.x);
-    this.a2 = Math.atan2(d2.y, d2.x);
+	this.a1 = Math.atan2(d1.y, d1.x);
+	this.a2 = Math.atan2(d2.y, d2.x);
 	this.indy = true;
 }
 
@@ -338,12 +338,12 @@ Angle.prototype.draw = function (ctx) {
 			anticlock=true;
 	}
 	ctx.beginPath();
-    ctx.moveTo(this.c.x, this.c.y);
-    ctx.arc(this.c.x, this.c.y, angRad, start, end, anticlock);
-    ctx.closePath();
-    ctx.fillStyle = this.color || GRAY;
-    ctx.globalAlpha = 0.6;
-    ctx.fill();
+  	ctx.moveTo(this.c.x, this.c.y);
+	ctx.arc(this.c.x, this.c.y, angRad, start, end, anticlock);
+	ctx.closePath();
+	ctx.fillStyle = this.color || GRAY;
+	ctx.globalAlpha = 0.6;
+	ctx.fill();
 }
 
 
@@ -848,11 +848,11 @@ let lineIntersections = {
 		return this.lineWithSlopeAndCircle(my, your);
 	},
 	lineParalleltoYandCircle: function lpyc(my, your) {
-		let a = 1;
+		let a =   1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-			    + square(your.o.x - my.x)
-			    + square(your.o.y);
+			+ square(your.o.x - my.x)
+			+ square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -864,13 +864,13 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-			    + 2 * my.slope * my.y_intercept
-			    - 2 * your.o.y * my.slope;
-		let c = square(your.o.x)
-		      + square(my.y_intercept)
-		  	  + square(your.o.y)
-		      - square(your.r)
-		      - 2 * my.y_intercept * your.o.y;
+			+ 2 * my.slope * my.y_intercept
+			- 2 * your.o.y * my.slope;
+		let c =   square(your.o.x)
+		        + square(my.y_intercept)
+		 	+ square(your.o.y)
+		        - square(your.r)
+		        - 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
