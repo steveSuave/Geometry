@@ -274,10 +274,10 @@ Circle.prototype.intersect = function (obj) {
 		return obj.intersect(this);
 	else if (obj.type == 4) {
 		var w = ( square(this.r)
-			- square(obj.r)
-		    	- square(this.o.x)
-			+ square(obj.o.x)
-			- square(this.o.y)
+                - square(obj.r)
+                - square(this.o.x)
+                + square(obj.o.x)
+                - square(this.o.y)
 		        + square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
@@ -305,7 +305,7 @@ Circle.prototype.getClosest = function (p) {
  * =========================================================================== */
 
 function Angle(c, p1, p2, color) {
-	this.c = c;
+	this.c  = c;
 	this.p1 = p1;
 	this.p2 = p2;
 	this.color = color || GRAY;
@@ -538,26 +538,34 @@ PlaenController.prototype.point = async function () {
 	this.point();
 }
 
-PlaenController.prototype.middlePoint = genericAddObjects([1, 1], Point.defineMiddle);
+PlaenController.prototype.middlePoint =
+		genericAddObjects([1, 1], Point.defineMiddle);
 
-PlaenController.prototype.twoPointLine = genericAddObjects([1, 1], Line.defineTwoPoints);
+PlaenController.prototype.twoPointLine =
+		genericAddObjects([1, 1], Line.defineTwoPoints);
 
-PlaenController.prototype.verticalLine = genericAddObjects([2, 1], Line.defineLineVertical);
+PlaenController.prototype.verticalLine =
+		genericAddObjects([2, 1], Line.defineLineVertical);
 
-PlaenController.prototype.paralelLine = genericAddObjects([2, 1], Line.defineLineParalel);
+PlaenController.prototype.paralelLine =
+		genericAddObjects([2, 1], Line.defineLineParalel);
 
-PlaenController.prototype.segmentBisector = genericAddObjects([1, 1], Line.defineSegmentBisector);
+PlaenController.prototype.segmentBisector =
+		genericAddObjects([1, 1], Line.defineSegmentBisector);
 
-PlaenController.prototype.angleBisector = genericAddObjects([1, 1, 1], Line.defineAngleBisector);
+PlaenController.prototype.angleBisector =
+		genericAddObjects([1, 1, 1], Line.defineAngleBisector);
 
-PlaenController.prototype.circleTwoPoint = genericAddObjects([1, 1], Circle.defineTwoPoint);
+PlaenController.prototype.circleTwoPoint =
+		genericAddObjects([1, 1], Circle.defineTwoPoint);
 
-PlaenController.prototype.circleThreePoint = genericAddObjects([1, 1, 1], Circle.defineThreePoint);
+PlaenController.prototype.circleThreePoint =
+		genericAddObjects([1, 1, 1], Circle.defineThreePoint);
 
 PlaenController.prototype.circleCompass = async function () {
-	var firstPoint = await this.asyncSelectObject(1);
+	var firstPoint  = await this.asyncSelectObject(1);
 	var secondPoint = await this.asyncSelectObject(1);
-	var thirdPoint = await this.asyncSelectObject(1);
+	var thirdPoint  = await this.asyncSelectObject(1);
 	this.addObject(new Circle(thirdPoint, firstPoint.dist(secondPoint)));
 	this.circleCompass();
 }
@@ -772,9 +780,11 @@ document.onkeydown = function (e) {
 	e = e || window.event;
 	switch (e.keyCode) {
 		// right arrow key
-		case 39: move(); break;
+		case 39: 
+			move(); break;
 		// left  arrow key
-		case 37: undo(); break;
+		case 37: 
+			undo(); break;
 		// letter r, for reload
 		case 82:
 			let p = document.getElementById("props");
@@ -851,8 +861,8 @@ let lineIntersections = {
 		let a =   1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-			+ square(your.o.x - my.x)
-			+ square(your.o.y);
+                + square(your.o.x - my.x)
+                + square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -864,11 +874,11 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-			+ 2 * my.slope * my.y_intercept
-			- 2 * your.o.y * my.slope;
+                + 2 * my.slope * my.y_intercept
+                - 2 * your.o.y * my.slope;
 		let c =   square(your.o.x)
 		        + square(my.y_intercept)
-		 	+ square(your.o.y)
+                + square(your.o.y)
 		        - square(your.r)
 		        - 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
