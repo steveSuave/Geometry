@@ -274,11 +274,11 @@ Circle.prototype.intersect = function (obj) {
 		return obj.intersect(this);
 	else if (obj.type == 4) {
 		var w = ( square(this.r)
-                - square(obj.r)
-                - square(this.o.x)
-                + square(obj.o.x)
-                - square(this.o.y)
-		        + square(obj.o.y) ) / 2;
+				- square(obj.r)
+				- square(this.o.x)
+				+ square(obj.o.x)
+				- square(this.o.y)
+				+ square(obj.o.y) ) / 2;
 		var l = Line.defineTwoPoints(this.o, obj.o);
 		var p = new Point();
 		p.x =    (w - l.y_intercept * (obj.o.y - this.o.y)) /
@@ -861,8 +861,8 @@ let lineIntersections = {
 		let a =   1;
 		let b = - 2 * your.o.y;
 		let c = - square(your.r)
-                + square(your.o.x - my.x)
-                + square(your.o.y);
+				+ square(your.o.x - my.x)
+				+ square(your.o.y);
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
@@ -874,13 +874,13 @@ let lineIntersections = {
 	lineWithSlopeAndCircle: function lwsc(my, your) {
 		let a = my.slope * my.slope + 1;
 		let b = - 2 * your.o.x
-                + 2 * my.slope * my.y_intercept
-                - 2 * your.o.y * my.slope;
+				+ 2 * my.slope * my.y_intercept
+				- 2 * your.o.y * my.slope;
 		let c =   square(your.o.x)
-		        + square(my.y_intercept)
-                + square(your.o.y)
-		        - square(your.r)
-		        - 2 * my.y_intercept * your.o.y;
+				+ square(my.y_intercept)
+				+ square(your.o.y)
+				- square(your.r)
+				- 2 * my.y_intercept * your.o.y;
 		let w = b * b - 4 * a * c;
 		if (w < 0) return [];
 		w = Math.sqrt(w);
