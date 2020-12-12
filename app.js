@@ -835,7 +835,7 @@ let lineIntersections = {
                 return [];
             let c = new Point();
             c.x = (your.y_intercept - my.y_intercept) /
-                (my.slope - your.slope);
+                       (my.slope - your.slope);
             c.y = my.slope * c.x + my.y_intercept;
             return [c];
         }
